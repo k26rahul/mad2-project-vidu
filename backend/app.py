@@ -2,15 +2,15 @@ from flask import Flask
 from models import db, Role, User
 from flask_security import Security, SQLAlchemyUserDatastore
 from populate_db import populate
-
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'
 app.config['SECURITY_PASSWORD_SALT'] = 'qwerty'
 
-
 db.init_app(app)
+CORS(app)
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore, register_blueprint=False)

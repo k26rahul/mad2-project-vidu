@@ -10,16 +10,24 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+#app {
+  padding: 4px;
+}
+
 button {
   color: white;
   background-color: seagreen;
   border: none;
-  font-size: 1.25rem;
-  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  padding: 0.5rem 1.5rem;
   cursor: pointer;
   user-select: none;
 }
 
-#app {
-  padding: 4px;
+form {
+  width: fit-content;
+  margin: 1rem auto;
+  padding: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
 }

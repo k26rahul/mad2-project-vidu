@@ -16,7 +16,8 @@ def login():
     login_user(user)
     return jsonify({
         "success": True,
-        "message": 'login successful'
+        "message": 'login successful',
+        "role": user.roles[0].name
     })
 
   return jsonify({
