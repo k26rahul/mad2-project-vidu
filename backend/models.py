@@ -7,6 +7,7 @@ db = SQLAlchemy()
 
 roles_users = Table(
     "roles_users",
+    db.metadata,
     Column("user_id", Integer, ForeignKey('user.id')),
     Column("role_id", Integer, ForeignKey('role.id'))
 )
@@ -23,4 +24,5 @@ class User(db.Model, UserMixin):
   email = Column(String, nullable=False, unique=True)
   password = Column(String, nullable=False)
   active = Column(Boolean, default=True)
+  fs_uniquifier = Column(String, unique=True, nullable=False)
   roles = relationship('Role', secondary=roles_users, back_populates='users')
