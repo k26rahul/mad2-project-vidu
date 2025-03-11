@@ -6,25 +6,32 @@ auth_bp = Blueprint('auth_bp', __name__)
 bp = auth_bp
 
 
-@bp.route('/api/login')
+@bp.route('/api/login', methods=['POST'])
 def login():
   email = request.form.get('email')
   password = request.form.get('password')
   user = User.query.filter_by(email=email).first()
 
   if user and verify_password(password, user.password):
+    login_user(user)
     return jsonify({
+        "success": True,
         "message": 'login successful'
     })
 
   return jsonify({
+      "success": False,
       "message": 'email or password incorrect'
   }), 401
 
 
 @bp.route('/api/logout')
 def logout():
-  return 'OK'
+  logout_user()
+  return jsonify({
+      'success': True,
+      'message': 'logged out successfully'
+  })
 
 
 @bp.route('/api/register/customer')
