@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import RoleMixin, UserMixin
+import uuid
 
 db = SQLAlchemy()
 
@@ -24,5 +25,5 @@ class User(db.Model, UserMixin):
   email = Column(String, nullable=False, unique=True)
   password = Column(String, nullable=False)
   active = Column(Boolean, default=True)
-  fs_uniquifier = Column(String, unique=True, nullable=False)
+  fs_uniquifier = Column(String, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
   roles = relationship('Role', secondary=roles_users, back_populates='users')
