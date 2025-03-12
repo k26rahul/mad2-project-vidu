@@ -1,12 +1,12 @@
 <script>
 import router from '@/router';
 import store from '@/store';
+import { get } from '@/utils';
 
 export default {
   methods: {
     async logout() {
-      let res = await fetch('http://127.0.0.1:5000/api/logout');
-      let data = await res.json();
+      let data = await get('/api/logout');
       if (data.success) {
         store.isLoggedIn = false;
         store.userRole = null;
