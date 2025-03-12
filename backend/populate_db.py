@@ -1,35 +1,60 @@
-from models import db, Role, User
+from models import db, Role, User, Customer, Professional, Service, ServiceRequest
 from flask_security import hash_password
+from sample_data import services, customers, professionals, service_requests
 
 
 def populate():
   if not Role.query.first():
-    db.session.add(Role(name='admin'))
-    db.session.add(Role(name='customer'))
-    db.session.add(Role(name='professionals'))
-    db.session.commit()
+    # add roles
+    admin_role = Role(name='admin')
+    customer_role = Role(name='customer')
+    professional_role = Role(name='professional')
+    db.session.add_all([admin_role, customer_role, professional_role])
 
-  if not User.query.first():
-    admin_role = Role.query.filter_by(name='admin').first()
-    customer_role = Role.query.filter_by(name='customer').first()
-    professionals_role = Role.query.filter_by(name='professionals').first()
-
+    # add admin
     db.session.add(User(
         email='admin@example.com',
         password=hash_password('12345'),
         roles=[admin_role]
     ))
 
-    db.session.add(User(
-        email='customer1@example.com',
-        password=hash_password('12345'),
-        roles=[customer_role]
-    ))
+    # add services
+    for service in services:
+      db.session.add(Service(**service))
 
-    db.session.add(User(
-        email='professionals1@example.com',
-        password=hash_password('12345'),
-        roles=[professionals_role]
-    ))
+    # add customers
+    for customer in customers:
+      user = User(
+          email=customer['email'],
+          password=hash_password('12345'),
+          roles=[customer_role]
+      )
+      customer = Customer(
+          name=customer['name'],
+          location=customer['location'],
+          pincode=customer['pincode'],
+          user=user
+      )
+      db.session.add_all([user, customer])
+
+    # add professionals
+    for professional in professionals:
+      user = User(
+          email=professional['email'],
+          password=hash_password('12345'),
+          roles=[professional_role]
+      )
+      professional = Professional(
+          name=professional['name'],
+          location=professional['location'],
+          pincode=professional['pincode'],
+          service_id=professional['service_id'],
+          user=user
+      )
+      db.session.add_all([user, professional])
+
+    # add service requests
+    for request in service_requests:
+      db.session.add(ServiceRequest(**request))
 
     db.session.commit()
