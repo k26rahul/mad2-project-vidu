@@ -8,8 +8,9 @@ bp = auth_bp
 
 @bp.route('/api/login', methods=['POST'])
 def login():
-  email = request.form.get('email')
-  password = request.form.get('password')
+  data = request.get_json()
+  email = data.get('email')
+  password = data.get('password')
   user = User.query.filter_by(email=email).first()
 
   if user and verify_password(password, user.password):

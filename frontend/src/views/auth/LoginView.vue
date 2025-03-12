@@ -1,6 +1,7 @@
 <script>
 import router from '@/router';
 import store from '@/store';
+import { post } from '@/utils';
 
 export default {
   setup() {
@@ -15,15 +16,10 @@ export default {
   },
   methods: {
     async submitForm() {
-      let formData = new FormData();
-      formData.append('email', this.email);
-      formData.append('password', this.password);
-
-      let res = await fetch('http://127.0.0.1:5000/api/login', {
-        method: 'POST',
-        body: formData,
+      let data = await post('/api/login', {
+        email: this.email,
+        password: this.password,
       });
-      let data = await res.json();
 
       if (data.success) {
         store.isLoggedIn = true;
