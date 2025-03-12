@@ -2,17 +2,18 @@ import store from './store';
 
 async function fetchHelper(url, options = {}) {
   try {
-    let res = await fetch(url, options);
+    let res = await fetch(url, options); // A. offline
     // if status code is 200-299
     if (res.ok) {
       let data = await res.json();
       return data;
     }
-    // else status code is 3xx/4xx/5xx (but fetch was successful)
+    // B. else status code is 3xx/4xx/5xx (note: fetch was successful)
     throw Error('response not ok');
   } catch (err) {
+    // 👆 this catches both A & B errors
     store.errorFlag = true; // show error alert in App.vue
-    console.error('💥 failure in fetchHelper:', err);
+    console.error('💥💥💥 failure in fetchHelper:', err);
   }
 }
 

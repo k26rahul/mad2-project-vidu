@@ -27,7 +27,7 @@ def login():
   }), 401
 
 
-@bp.route('/api/logout', methods=['POST'])
+@bp.route('/api/logout')
 def logout():
   logout_user()
   return jsonify({
