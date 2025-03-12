@@ -1,4 +1,5 @@
 <script>
+import router from '@/router';
 import store from '@/store';
 
 export default {
@@ -25,7 +26,9 @@ export default {
       let data = await res.json();
 
       if (data.success) {
+        store.isLoggedIn = true;
         store.userRole = data.role;
+        router.push('/');
       } else {
         this.errorFlag = true;
       }
