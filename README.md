@@ -11,6 +11,34 @@ A multi-user platform for comprehensive home services, connecting customers with
 - Backend jobs for notifications and reports.
 - Optimized performance with caching.
 
+## Folder Structure
+
+```
+├── backend/
+│   ├── app.py               # Flask application entry point
+│   ├── models.py            # Database models
+│   ├── populate_db.py       # Database seeding script
+│   └── routes/
+│       ├── admin.py         # Admin routes
+│       ├── auth.py          # Authentication routes
+│       ├── customer.py      # Customer routes
+│       └── professionals.py # Professional routes
+│
+└── frontend/
+    ├── src/
+    │   ├── components/    # Reusable Vue components
+    │   ├── views/
+    │   │   ├── admin/     # Admin dashboard views
+    │   │   ├── auth/      # Login/Register views
+    │   │   ├── customer/  # Customer dashboard views
+    │   │   └── professionals/ # Professional dashboard views
+    │   ├── App.vue        # Root component
+    │   ├── main.js        # Application entry point
+    │   ├── router.js      # Vue router configuration
+    │   └── store.js       # State management
+    └── index.html         # HTML entry point
+```
+
 ## Tech Stack
 
 - **Backend:** Flask, Flask-CORS, Flask-SQLAlchemy
@@ -19,6 +47,8 @@ A multi-user platform for comprehensive home services, connecting customers with
 - **Caching & Jobs:** Redis, Celery
 
 ## Setup
+
+### Backend Setup
 
 ```sh
 # Clone repo
@@ -32,6 +62,24 @@ source venv/bin/activate  # (Windows: venv\Scripts\activate)
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the application
-python app.py
+# Run the Flask application
+python backend/app.py
 ```
+
+### Frontend Setup
+
+```sh
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The application will be available at:
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000
