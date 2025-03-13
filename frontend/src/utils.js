@@ -8,7 +8,7 @@ async function fetchHelper(url, options = {}) {
     });
     let data = await res.json();
     return data;
-  } catch (err) {
+  } catch {
     store.errorFlag = true; // show error alert in App.vue
   }
 }
