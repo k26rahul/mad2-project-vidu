@@ -1,28 +1,29 @@
 from flask import Blueprint, jsonify
 from models import Customer
-from flask_security import login_required, auth_required, roles_required, roles_accepted
+from flask_security import roles_required
+from utils import better_jsonify
 
 admin_bp = Blueprint('admin_bp', __name__)
 bp = admin_bp
 
 
 @bp.route('/api/whoami')
-# @auth_required()
 def whoami():
   from flask_security import current_user
+  is_authenticated = current_user.is_authenticated
   return jsonify({
-      'user': current_user.email if current_user.is_authenticated else None,
-      'role': current_user.role.name if current_user.is_authenticated and current_user.role else None
+      'is_authenticated': is_authenticated,
+      'user': current_user.email if is_authenticated else None,
+      'role': current_user.roles[0].name if is_authenticated else None
   })
 
 
 @bp.route('/api/admin/customers')
-@auth_required('session')
-@roles_accepted('admin')
+@roles_required('admin')
 def customers():
   # get all customers data
   customers = Customer.query.all()
-  return jsonify(customers)
+  return better_jsonify(customers)
 
 
 # get all professionals data

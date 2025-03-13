@@ -7,37 +7,51 @@ import uuid
 db = SQLAlchemy()
 
 
-class Role(db.Model, RoleMixin):
+class Base(db.Model):
+  __abstract__ = True  # very important
+
+  def to_dict(self):
+    # https://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json
+    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
+class UserRoles(Base):
+  id = Column(Integer, primary_key=True, autoincrement=True)
+  user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+  role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
+
+
+class Role(Base, RoleMixin):
   id = Column(Integer, primary_key=True, autoincrement=True)
   name = Column(String, nullable=False, unique=True)
-  user = relationship('User', back_populates='role')
+
+  users = relationship('User', secondary='user_roles', back_populates='roles')
 
 
-class User(db.Model, UserMixin):
+class User(Base, UserMixin):
   id = Column(Integer, primary_key=True, autoincrement=True)
   email = Column(String, nullable=False, unique=True)
   password = Column(String, nullable=False)
   active = Column(Boolean, default=True)
   fs_uniquifier = Column(String, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
-  role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
-  role = relationship('Role', back_populates='user')
+
+  roles = relationship('Role', secondary='user_roles', back_populates='users')
   customer = relationship('Customer', back_populates='user')
   professional = relationship('Professional', back_populates='user')
 
 
-class Customer(db.Model):
+class Customer(Base):
   id = Column(Integer, primary_key=True, autoincrement=True)
   name = Column(String, nullable=False)
   location = Column(String, nullable=False)
   pincode = Column(String, nullable=False)
   user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+
   user = relationship('User', back_populates='customer')
   service_requests = relationship('ServiceRequest', back_populates='customer')
 
-  serialize_rules = ('-user.customer', '-user.roles', '-service_requests')
 
-
-class Professional(db.Model):
+class Professional(Base):
   id = Column(Integer, primary_key=True, autoincrement=True)
   name = Column(String, nullable=False)
   location = Column(String, nullable=False)
@@ -45,22 +59,24 @@ class Professional(db.Model):
   user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
   service_id = Column(Integer, ForeignKey('service.id'), nullable=False)
   is_approved = Column(Boolean, default=False)
+
   user = relationship('User', back_populates='professional')
   service = relationship('Service', back_populates='professionals')
   service_requests = relationship('ServiceRequest', back_populates='professional')
 
 
-class Service(db.Model):
+class Service(Base):
   id = Column(Integer, primary_key=True, autoincrement=True)
   name = Column(String, nullable=False)
   price = Column(Float, nullable=False)
   description = Column(String)
   time_required = Column(Integer, default=60)
+
   professionals = relationship('Professional', back_populates='service')
   service_requests = relationship('ServiceRequest', back_populates='service')
 
 
-class ServiceRequest(db.Model):
+class ServiceRequest(Base):
   id = Column(Integer, primary_key=True, autoincrement=True)
   customer_id = Column(Integer, ForeignKey('customer.id'), nullable=False)
   professional_id = Column(Integer, ForeignKey('professional.id'), nullable=False)
@@ -69,6 +85,7 @@ class ServiceRequest(db.Model):
   service_date = Column(Date, nullable=False)
   rating = Column(Integer)
   remarks = Column(String)
+
   customer = relationship('Customer', back_populates='service_requests')
   professional = relationship('Professional', back_populates='service_requests')
   service = relationship('Service', back_populates='service_requests')

@@ -1,3 +1,6 @@
+sudo npm install -g nodemon
+
+
 login: admin, customer, professionals
 register customer
 register professionals
