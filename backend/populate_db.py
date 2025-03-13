@@ -15,7 +15,7 @@ def populate():
     db.session.add(User(
         email='admin@example.com',
         password=hash_password('12345'),
-        roles=[admin_role]
+        role=admin_role
     ))
 
     # add services
@@ -27,7 +27,7 @@ def populate():
       user = User(
           email=customer['email'],
           password=hash_password('12345'),
-          roles=[customer_role]
+          role=customer_role
       )
       customer = Customer(
           name=customer['name'],
@@ -42,7 +42,7 @@ def populate():
       user = User(
           email=professional['email'],
           password=hash_password('12345'),
-          roles=[professional_role]
+          role=professional_role
       )
       professional = Professional(
           name=professional['name'],

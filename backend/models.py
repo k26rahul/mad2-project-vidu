@@ -7,16 +7,10 @@ import uuid
 db = SQLAlchemy()
 
 
-class UserRoles(db.Model):
-  id = Column(Integer, primary_key=True, autoincrement=True)
-  user_id = Column(Integer, ForeignKey('user.id'))
-  role_id = Column(Integer, ForeignKey('role.id'))
-
-
 class Role(db.Model, RoleMixin):
   id = Column(Integer, primary_key=True, autoincrement=True)
   name = Column(String, nullable=False, unique=True)
-  users = relationship('User', secondary='user_roles', back_populates='roles')
+  user = relationship('User', back_populates='role')
 
 
 class User(db.Model, UserMixin):
@@ -25,7 +19,8 @@ class User(db.Model, UserMixin):
   password = Column(String, nullable=False)
   active = Column(Boolean, default=True)
   fs_uniquifier = Column(String, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
-  roles = relationship('Role', secondary='user_roles', back_populates='users')
+  role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
+  role = relationship('Role', back_populates='user')
   customer = relationship('Customer', back_populates='user')
   professional = relationship('Professional', back_populates='user')
 
@@ -38,6 +33,8 @@ class Customer(db.Model):
   user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
   user = relationship('User', back_populates='customer')
   service_requests = relationship('ServiceRequest', back_populates='customer')
+
+  serialize_rules = ('-user.customer', '-user.roles', '-service_requests')
 
 
 class Professional(db.Model):
