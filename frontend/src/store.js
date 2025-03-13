@@ -1,12 +1,12 @@
 import { reactive, watch } from 'vue';
 
-const initialState = {
+const saved = JSON.parse(localStorage.getItem('appState')) || {};
+const appState = {
   isLoggedIn: false,
   userRole: null,
+  ...saved,
   errorFlag: false,
 };
-
-const appState = JSON.parse(localStorage.getItem('appState')) || initialState;
 
 const store = reactive(appState);
 
@@ -17,7 +17,5 @@ watch(
   },
   { deep: true }
 );
-
-store.errorFlag = false;
 
 export default store;
