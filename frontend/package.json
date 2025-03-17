@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primeuix/themes": "^1.0.0",
+    "primevue": "^4.3.2",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vuetify": "^3.7.16"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",

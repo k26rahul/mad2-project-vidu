@@ -71,13 +71,20 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/') {
-    if (store.isLoggedIn) {
+  if (store.isLoggedIn) {
+    if (to.path === '/') {
       if (store.userRole === 'admin') return next('/admin/home');
       else if (store.userRole === 'customer') return next('/customer/home');
       else return next('/professionals/home');
     }
+  } else if (
+    to.path.startsWith('/admin') ||
+    to.path.startsWith('/customer') ||
+    to.path.startsWith('/professionals')
+  ) {
+    return next('/login');
   }
+
   next();
 });
 

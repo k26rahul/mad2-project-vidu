@@ -16,6 +16,12 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = True  # Make sessions persistent
 app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # Session lifetime in seconds (e.g. 1 day)
 
+# Enable 3rd party cookies in browser
+app.config['REMEMBER_COOKIE_SAMESITE'] = 'None'  # remember_token=
+app.config['REMEMBER_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # session=
+app.config['SESSION_COOKIE_SECURE'] = True
+
 db.init_app(app)
 CORS(app, supports_credentials=True)
 Session(app)  # Initialize Flask-Session
