@@ -11,7 +11,7 @@ export default {
     return {
       email: '',
       password: '',
-      errorFlag: false,
+      error: null,
     };
   },
   methods: {
@@ -26,7 +26,7 @@ export default {
         store.userRole = data.role;
         router.push('/');
       } else {
-        this.errorFlag = true;
+        this.error = data.message;
       }
     },
   },
@@ -37,8 +37,11 @@ export default {
   <h1 style="text-align: center; margin-top: 1rem">Login</h1>
 
   <form @submit.prevent="submitForm">
-    <p v-show="errorFlag" class="alert alert-danger">
-      Email or password incorrect, please try again.
+    <p v-show="error" class="alert alert-danger">
+      <span v-if="error === 'Email or password incorrect'"
+        >Email or password incorrect, please try again.</span
+      >
+      <span v-else-if="error === 'User is blocked'">You are blocked, please contact admins.</span>
     </p>
 
     <div>

@@ -23,7 +23,12 @@ def whoami():
 def customers():
   # get all customers data
   customers = Customer.query.all()
-  return better_jsonify(customers)
+  data = [{
+      **c.to_dict(),
+      'email': c.user.email,
+      'active': c.user.active
+  } for c in customers]
+  return jsonify(data)
 
 
 # get all professionals data

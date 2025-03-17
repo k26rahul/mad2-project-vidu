@@ -14,6 +14,13 @@ def login():
   user = User.query.filter_by(email=email).first()
 
   if user and verify_password(password, user.password):
+    if not user.active:
+      return jsonify({
+          "success": False,
+          "message": 'User is blocked',
+          "role": user.roles[0].name
+      }), 403
+
     login_user(user, remember=True)
     return jsonify({
         "success": True,
