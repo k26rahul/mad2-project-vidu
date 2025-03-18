@@ -10,6 +10,16 @@ export default {
   async mounted() {
     this.customers = await get('/api/admin/customers');
   },
+  methods: {
+    async block(customer) {
+      await get(`/api/admin/block/${customer.user_id}`);
+      customer.active = false;
+    },
+    async unblock(customer) {
+      await get(`/api/admin/unblock/${customer.user_id}`);
+      customer.active = true;
+    },
+  },
 };
 </script>
 
@@ -21,6 +31,7 @@ export default {
         <tr>
           <th>#</th>
           <th>Name</th>
+          <th>Email</th>
           <th>Location</th>
           <th>Pincode</th>
           <th>Actions</th>
@@ -30,11 +41,12 @@ export default {
         <tr v-for="c in customers">
           <td>{{ c.id }}</td>
           <td>{{ c.name }}</td>
+          <td>{{ c.email }}</td>
           <td>{{ c.location }}</td>
           <td>{{ c.pincode }}</td>
           <td>
-            <button>Block</button>
-            <button>Unblock</button>
+            <button v-if="c.active" @click="block(c)">Block</button>
+            <button v-else @click="unblock(c)">Unblock</button>
           </td>
         </tr>
       </tbody>

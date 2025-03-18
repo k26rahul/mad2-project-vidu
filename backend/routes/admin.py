@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from models import Customer
+from models import db, Customer, User
 from flask_security import roles_required
 from utils import better_jsonify
 
@@ -25,14 +25,38 @@ def customers():
   customers = Customer.query.all()
   data = [{
       **c.to_dict(),
-      'email': c.user.email,
-      'active': c.user.active
+      "email": c.user.email,
+      "active": c.user.active
   } for c in customers]
   return jsonify(data)
 
 
+@bp.route('/api/admin/block/<int:user_id>')
+@roles_required('admin')
+def block(user_id):
+  # block user (customer/professional both)
+  user = User.query.get(user_id)
+  user.active = False
+  db.session.commit()
+  return jsonify({
+      "success": True,
+      "message": "Blocked successfully"
+  })
+
+
+@bp.route('/api/admin/unblock/<int:user_id>')
+@roles_required('admin')
+def unblock(user_id):
+  # unblock user (customer/professional both)
+  user = User.query.get(user_id)
+  user.active = True
+  db.session.commit()
+  return jsonify({
+      "success": True,
+      "message": "Unblocked successfully"
+  })
+
 # get all professionals data
-# block/unblock user (customer/professional both)
 # approve/reject professional
 # create/edit/delete services
 # search professionals [name, location, pincode, service]
