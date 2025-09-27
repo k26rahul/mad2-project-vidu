@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_security.utils import login_user, logout_user, verify_password
-from models import User
+from flask_security import current_user
+from models import db, User
+import uuid
 
 auth_bp = Blueprint('auth_bp', __name__)
 bp = auth_bp
@@ -36,6 +38,10 @@ def login():
 
 @bp.route('/api/logout')
 def logout():
+  # Invalidate the remember_token
+  current_user.fs_uniquifier = str(uuid.uuid4())
+  db.session.commit()
+
   logout_user()
   return jsonify({
       'success': True,

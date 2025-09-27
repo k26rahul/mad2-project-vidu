@@ -10,6 +10,7 @@ import AdminDashboardView from './views/admin/AdminDashboardView.vue';
 import AdminHomeView from './views/admin/AdminHomeView.vue';
 import AdminSearchView from './views/admin/AdminSearchView.vue';
 import AdminSummaryView from './views/admin/AdminSummaryView.vue';
+import AdminAddServiceView from './views/admin/AdminAddServiceView.vue';
 
 import CustomerDashboardView from './views/customer/CustomerDashboardView.vue';
 import CustomerHomeView from './views/customer/CustomerHomeView.vue';
@@ -35,6 +36,7 @@ const routes = [
     children: [
       { path: '', redirect: '/admin/home' },
       { path: 'home', component: AdminHomeView },
+      { path: 'add-service', component: AdminAddServiceView },
       { path: 'search', component: AdminSearchView },
       { path: 'summary', component: AdminSummaryView },
     ],

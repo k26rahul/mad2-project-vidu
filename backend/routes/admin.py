@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify
-from models import db, Customer, User
+from flask import Blueprint, jsonify, request
+from models import db, Customer, User, Service
 from flask_security import roles_required
 from utils import better_jsonify
 
@@ -54,6 +54,26 @@ def unblock(user_id):
   return jsonify({
       "success": True,
       "message": "Unblocked successfully"
+  })
+
+
+@bp.route('/api/admin/create-service')
+@roles_required('admin')
+def create_service():
+  # create service
+  data = request.get_json()
+  name = data.get('name')
+  price = ...
+  time_required = ...
+
+  db.session.add(Service(
+      name=name,
+      price=price,
+      time_required=time_required
+  ))
+  db.session.commit()
+  return jsonify({
+
   })
 
 # get all professionals data

@@ -2,6 +2,10 @@
 
 A multi-user platform for comprehensive home services, connecting customers with verified service professionals.
 
+Project submission for Modern Application Development II (January 2025).
+
+> **Note:** This repository contains only the prototype version (used to learn and experiment with concepts) of the Household Services Application. Development in this repository was left incomplete, and the actual project development was moved to [this separate repository](https://github.com/vidhatrihr/mad2-project).
+
 ## Features
 
 - Admin Dashboard: Manage users, services, and approvals.
@@ -52,12 +56,12 @@ A multi-user platform for comprehensive home services, connecting customers with
 
 ```sh
 # Clone repo
-git clone https://github.com/vidhatrihr/mad2-project.git
-cd mad2-project
+git clone https://github.com/k26rahul/mad2-project-vidu.git
+cd mad2-project-vidu
 
 # Setup virtual environment
-python3 -m venv venv
-source venv/bin/activate  # (Windows: venv\Scripts\activate)
+python -m venv venv
+source venv/bin/activate # (Windows: venv\Scripts\activate)
 
 # Install dependencies
 pip install -r requirements.txt
